@@ -44,7 +44,7 @@ public class ClienteController {
 		LOGGER.info("Calling GET customers ...");
 		return clienteService.findAll();
 	}
-	@GetMapping(value = "clientes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "customers/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Cliente findById(@PathVariable int id){
 		LOGGER.info("Calling GET customers by id ...");
 		return clienteService.findById(id);
@@ -54,7 +54,7 @@ public class ClienteController {
 			, MissingResourceException.class , HttpMessageNotReadableException.class,
 			MethodNotAllowedException.class, HttpRequestMethodNotSupportedException.class})
 	public ResponseEntity handleRequestException(HttpServletRequest request) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Resource was not found, try : customers - customers/1",HttpStatus.BAD_REQUEST);
 	}
 	
 }
