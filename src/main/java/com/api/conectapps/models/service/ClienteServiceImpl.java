@@ -30,9 +30,10 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public List<Cliente> findAll() {
 		try {
+			logger.info("Getting all customers");
 			return clienteDao.findAll();
 		} catch (Exception e) {
-			logger.error("Cannot posible find all clients");
+			logger.error("Cannot posible find all customers");
 			return null;
 		}
 	}
@@ -40,9 +41,10 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public Cliente findById(int id) {
 		try {
+			logger.info("Get customers by id : " + id);
 			return clienteDao.findById(id).orElse(null);
 		} catch (Exception e) {
-			logger.error("Cannot posible find client by id");
+			logger.error("Cannot posible find customers by id");
 			return null;
 		}
 	}
@@ -50,10 +52,12 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public void saveData() {
 		try {
+			logger.info("Calling api " + sourceData);
 			List<Cliente> clientes = Arrays.asList(restTemplate.getForObject(sourceData,Cliente[].class));
 			clienteDao.saveAll(clientes);
+			logger.info("Information was saved correctly");
 		} catch (Exception e) {
-			logger.error("Cannot posible store client data");
+			logger.error("It was not possible to obtain the information");
 		}
 		
 	}

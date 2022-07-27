@@ -1,45 +1,60 @@
 package com.api.conectapps.controller;
 
 import java.util.List;
+import java.util.MissingResourceException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.annotation.*;
 
 import com.api.conectapps.models.entity.Cliente;
 import com.api.conectapps.models.service.ClienteService;
+import org.springframework.web.server.MethodNotAllowedException;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class ClienteController {
 	
-	private static Logger logger = LogManager.getLogger(ClienteController.class);
+	static Logger LOGGER = LogManager.getLogger(ClienteController.class);
 	
 	@Autowired
 	private ClienteService clienteService;
 
-	@GetMapping(value = "saveAll")
+	@PostMapping(value = "customers")
 	public ResponseEntity<Object> saveAllClients(){
-		logger.info("Calling saveAll resource ...");
+		LOGGER.info("Calling POST customers ...");
 		clienteService.saveData();
 		// LLAMADA A LA OTRA API Y GUARDADO DE DATOS
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "customers", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cliente> findAll(){
-		logger.info("Calling findAll resource ...");
+		LOGGER.info("Calling GET customers ...");
 		return clienteService.findAll();
 	}
-	@GetMapping(value = "findById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Cliente findById(@RequestParam int id){
-		logger.info("Calling findById resource ...");
+	@GetMapping(value = "clientes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Cliente findById(@PathVariable int id){
+		LOGGER.info("Calling GET customers by id ...");
 		return clienteService.findById(id);
+	}
+
+	@ExceptionHandler(value =  {MissingRequestHeaderException.class, MissingPathVariableException.class
+			, MissingResourceException.class , HttpMessageNotReadableException.class,
+			MethodNotAllowedException.class, HttpRequestMethodNotSupportedException.class})
+	public ResponseEntity handleRequestException(HttpServletRequest request) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
 }
