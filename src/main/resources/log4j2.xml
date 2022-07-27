@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+	<Properties>
+	<Property name="instance">0</Property>
+	<Property name="module.name">conectapps</Property>
+	   <Property name="log.dir">./logs</Property>
+		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName}--- [%15.15t] %-40.40c{1.} : %m%n%ex
+		</Property>
+	</Properties>
+	<Appenders>
+		<Console name="ConsoleAppender" target="SYSTEM_OUT"
+			follow="true">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+		</Console>
+		<!-- Rolling File Appender -->
+		<RollingRandomAccessFile name="FileAppender"
+			fileName="${log.dir}/${module.name}-${instance}.log"
+			filePattern="${log.dir}/conectapps-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="RollingErrorLogToFile"
+                                 fileName="${log.dir}/error-${module.name}-${instance}.log"
+                                 filePattern="${log.dir}/backup-error-${module.name}.log-%d{yyyy-MM-dd}-%i.log.gz">
+
+            <PatternLayout pattern="%d{DEFAULT} [%-5level][%maxLen{%-24logger{1}}{21}]%msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="30">
+                <Delete basePath="${log.dir}/" maxDepth="1">
+                    <IfFileName glob="*.log.gz" />
+                    <IfLastModified age="7d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRootLogToFile"
+                                 fileName="${log.dir}/root-${module.name}-${instance}.log"
+                                 filePattern="${log.dir}/backup-root-${module.name}.log-%d{yyyy-MM-dd}-%i.log.gz">
+
+            <PatternLayout pattern="%d{DEFAULT} [%-5level][%maxLen{%-24logger{1}}{21}] %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="30">
+                <Delete basePath="${log.dir}/" maxDepth="1">
+                    <IfFileName glob="*.log.gz" />
+                    <IfLastModified age="7d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="com.api" level="INFO"
+			additivity="false">
+			<AppenderRef ref="FileAppender"/>
+			<AppenderRef ref="RollingRootLogToFile"/>
+		</Logger>
+		<Logger name="com.api" level="ERROR"
+			additivity="false">
+			<AppenderRef ref="RollingErrorLogToFile" />
+		</Logger>
+		<Root level="INFO">
+			<AppenderRef ref="FileAppender"/>
+			<AppenderRef ref="RollingRootLogToFile"/>
+			<AppenderRef ref="RollingErrorLogToFile"/>
+		</Root>
+	</Loggers>
+</Configuration>
