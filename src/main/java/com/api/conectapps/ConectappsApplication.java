@@ -6,17 +6,16 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class ConectappsApplication  {
-//public class ConectappsApplication extends SpringBootServletInitializer {
+//public class ConectappsApplication  {
+public class ConectappsApplication extends SpringBootServletInitializer {
 
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(ConectappsApplication.class);
+	}
+	
 	public static void main(String[] args) {
 			SpringApplication.run(ConectappsApplication.class, args);
 	}
-	 
-//	@Override
-//	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-//		return builder.sources(ConectappsApplication.class);
-//	}
 	
-
 }

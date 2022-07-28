@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.api.conectapps.models.dao.ClienteDao;
-import com.api.conectapps.models.entity.Cliente;
+import com.api.conectapps.models.dao.ClientDao;
+import com.api.conectapps.models.entity.Client;
 
 @Service
-public class ClienteServiceImpl implements ClienteService {
+public class ClientServiceImpl implements ClientService {
 	
-    final Logger logger = LogManager.getLogger(ClienteServiceImpl.class);
+    final Logger logger = LogManager.getLogger(ClientServiceImpl.class);
 	
 	@Autowired
-	private ClienteDao clienteDao;
+	private ClientDao clientDao;
 	
 	@Autowired 
 	private RestTemplate restTemplate;
@@ -28,23 +28,23 @@ public class ClienteServiceImpl implements ClienteService {
 	private String sourceData;
 	
 	@Override
-	public List<Cliente> findAll() {
+	public List<Client> findAll() {
 		try {
 			logger.info("Getting all customers");
-			return clienteDao.findAll();
+			return clientDao.findAll();
 		} catch (Exception e) {
-			logger.error("Cannot posible find all customers");
+			logger.error("Cannot posible find all customers ERROR: {}", e);
 			return null;
 		}
 	}
 
 	@Override
-	public Cliente findById(int id) {
+	public Client findById(int id) {
 		try {
-			logger.info("Get customers by id : " + id);
-			return clienteDao.findById(id).orElse(null);
+			logger.info("Get customer by id : {}" , id);
+			return clientDao.findById(id).orElse(null);
 		} catch (Exception e) {
-			logger.error("Cannot posible find customers by id");
+			logger.error("Cannot posible find customers by id ERROR: {}", e);
 			return null;
 		}
 	}
@@ -52,12 +52,12 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public void saveData() {
 		try {
-			logger.info("Calling api " + sourceData);
-			List<Cliente> clientes = Arrays.asList(restTemplate.getForObject(sourceData,Cliente[].class));
-			clienteDao.saveAll(clientes);
+			logger.info("Calling api {}", sourceData);
+			List<Client> clients = Arrays.asList(restTemplate.getForObject(sourceData, Client[].class));
+			clientDao.saveAll(clients);
 			logger.info("Information was saved correctly");
 		} catch (Exception e) {
-			logger.error("It was not possible to obtain the information");
+			logger.error("It was not possible to obtain the information ERROR: {}", e);
 		}
 		
 	}

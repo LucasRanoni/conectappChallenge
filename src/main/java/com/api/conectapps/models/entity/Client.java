@@ -1,5 +1,7 @@
 package com.api.conectapps.models.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,13 +9,15 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cliente")
-public class Cliente {
-
+public class Client{
+	
 	@Column
 	@Id
-	private int userId;
-	@Column
 	private int id;
+	
+	@Column
+	private int userId;
+	
 	@Column
 	private String title;
 	@Column
