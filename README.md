@@ -40,5 +40,5 @@ spring.datasource.password : con la contraseña
 ### Como consultar la documentacion de Swagger? ###
 
 ```
-/provisioning/document.html
+http://localhost:8080/conectapps/swagger-ui/index.html
 ```
