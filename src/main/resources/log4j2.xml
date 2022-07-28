@@ -3,7 +3,7 @@
 	<Properties>
 		<Property name="instance">0</Property>
 		<Property name="module.name">conectapps</Property>
-		<Property name="log.dir">D:\lranoni\Escritorio</Property>
+		<Property name="log.dir">RUTA DEL LOG</Property>
 	</Properties>
 	<Appenders>
 		<Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
