@@ -1,0 +1,7 @@
+Compile using python
+python pymvn.py
+
+without args: help
+keep  : it does not change version w.x.y.z
+mayor : it change version version w.x.y+1.z
+minor : it change version version w.x.y.z+1
